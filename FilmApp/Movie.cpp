@@ -1,13 +1,15 @@
 #include "Movie.h"
-
-Movie* movieList = new Movie();
-movieList
-
+#include <iostream>
+using std::cout;
 Movie::Movie()
 {
-	this->name = "Turkiye Simulasyonu";
+	this->name = "default name";
 	this->rate = 0.0;
-	this->year = 2002;
+	this->year = 0;
+
+	this->nextByName = NULL;
+	this->nextByRate = NULL;
+	this->nextByYear = NULL;
 }
 
 Movie::Movie(string name, double rate, int year)
@@ -15,6 +17,10 @@ Movie::Movie(string name, double rate, int year)
 	this->name = name;
 	this->rate = rate;
 	this->year = year;
+
+	this->nextByName = NULL;
+	this->nextByRate = NULL;
+	this->nextByYear = NULL;
 }
 
 string Movie::getName()
@@ -77,27 +83,203 @@ void Movie::setNextByYear(Movie* nextByYear)
 	this->nextByYear = nextByYear;
 }
 
-void Movie::add(string name, double rate, int year)
-{
-	Movie* tempMovie = new Movie(name, rate, year);
+void Movie::add(Movie* movieList,string name, double rate, int year)
+{	
+	Movie* movie = new Movie(name,rate,year);
+	addByName(movieList, movie);
+	addByYear(movieList, movie);
+	addByRate(movieList, movie);
 
-	/*
-	if (movieList == NULL) {
-	
-		movieList = tempMovie;
-		
-		movieList->nextByName = NULL;
-		movieList->nextByName = tempMovie;
-	
+}
+
+bool Movie::remove(Movie* movieList, string name)
+{
+	if (removeByName(movieList, name) == false) {
+		return false;
 	}
 	else {
-		
-		movieList->nextByName = tempMovie;
-		movieList = movieList->nextByName;
-		movieList->nextByName = NULL;
+		removeByRate(movieList, name);
+		removeByYear(movieList, name);
+		return true;
 	}
-	*/
+}
+
+void Movie::update(Movie* movieList, string name, double newRate)
+{
+
+	if (movieList == NULL || movieList->nextByRate == NULL) {
+		cout << "List is empty.\n";
+		return;
+	}
+
+	Movie* traversal = movieList;
+	while (traversal->nextByRate != NULL) {
+		if (name.compare(traversal->nextByRate->name) == 0) {
+			Movie* temp = traversal->nextByRate;
+			traversal->nextByRate = traversal->nextByRate->nextByRate;
+			temp->rate = newRate;
+			temp->nextByRate = NULL;
+			addByRate(movieList, temp);
+			//cout << "Movie rate is updated.\n";
+			return;
+		}
+		traversal = traversal->nextByRate;
+	}
+	/*
+	Movie* traversal = movieList;
 	
+	while (traversal->nextByRate != NULL) {
+		if (name.compare(traversal->nextByRate->name) == 0) {
+			traversal->nextByRate = traversal->nextByRate->nextByRate;
+			return;
+		}
+		traversal = traversal->nextByRate;
+	}*/
+	cout << "The movie\"" << name << "\" doesn't exist in the system.";
+	return;
+}
+
+
+void Movie::printByYear(Movie* head)
+{
+	if ((head == NULL) || (head->nextByYear == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	Movie* traversal = head;
+	while (traversal->nextByYear != NULL) {
+		traversal = traversal->nextByYear;
+		printMovie(traversal);
+	}
+}
+
+void Movie::printByName(Movie* head)
+{
+	if ((head == NULL) || (head->nextByName == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	Movie* traversal = head;
+	while (traversal->nextByName != NULL) {
+		traversal = traversal->nextByName;
+		printMovie(traversal);
+	}
+}
+
+void Movie::printByRate(Movie* head)
+{
+	if ((head == NULL) || (head->nextByRate == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	Movie* traversal = head;
+	while (traversal->nextByRate != NULL) {
+		traversal = traversal->nextByRate;
+		printMovie(traversal);
+	}
+}
+
+void Movie::addByName(Movie* movieList, Movie* newMovie) {
+
+	Movie* traversal = movieList;
+	while (traversal->nextByName != NULL) {
+		if (newMovie->name.compare(traversal->getNextByName()->getName()) == 1) {
+			traversal = traversal->nextByName;
+		}
+		else {
+			Movie* temp = traversal->getNextByName();
+			traversal->nextByName = newMovie;
+			newMovie->nextByName = temp;
+			return;
+		}
+	}
+	traversal->setNextByName(newMovie);
+}
+
+void Movie::addByRate(Movie* movieList, Movie* newMovie)
+{
+	Movie* traversal = movieList;
+	while (traversal->nextByRate != NULL) {
+		if (newMovie->rate > traversal->getNextByRate()->getRate()) {
+			traversal = traversal->nextByRate;
+		}
+		else {
+			Movie* temp = traversal->getNextByRate();
+			traversal->nextByRate = newMovie;
+			newMovie->nextByRate = temp;
+			return;
+		}
+	}
+	traversal->setNextByRate(newMovie);
+}
+
+void Movie::addByYear(Movie* movieList, Movie* newMovie)
+{
+	Movie* traversal = movieList;
+	while (traversal->nextByYear != NULL) {
+		if (newMovie->year > traversal->getNextByYear()->getYear() ) {
+			traversal = traversal->nextByYear;
+		}
+		else {
+			Movie* temp = traversal->getNextByYear();
+			traversal->nextByYear = newMovie;
+			newMovie->nextByYear = temp;
+			return;
+		}
+	}
+	traversal->setNextByYear(newMovie);
+}
+
+void Movie::printMovie(Movie* movie)
+{
+	if (movie == NULL) {
+		cout << "Movie tried to be printed is NULL!\n";
+		return;
+	}
+	cout << movie->name << " " << movie->rate << " " << movie->year << "\n";
+}
+
+bool Movie::removeByName(Movie* movieList, string name)
+{
+	if (movieList == NULL || movieList->nextByName == NULL) {
+		return false;
+	}
+
+	Movie* traversal = movieList;
+	while (traversal->nextByName != NULL) {
+		if (name.compare(traversal->nextByName->name) == 0) {
+			traversal->nextByName = traversal->nextByName->nextByName;
+			return true;
+		}
+		traversal = traversal->nextByName;
+	}
+	return false;
+}
+
+void Movie::removeByRate(Movie* movieList, string name)
+{
+	Movie* traversal = movieList;
+	
+	while (traversal->nextByRate != NULL) {
+		if (name.compare(traversal->nextByRate->name) == 0) {
+			traversal->nextByRate = traversal->nextByRate->nextByRate;
+			return;
+		}
+		traversal = traversal->nextByRate;
+	}
+}
+
+void Movie::removeByYear(Movie* movieList, string name)
+{
+	Movie* traversal = movieList;
+
+	while (traversal->nextByYear != NULL) {
+		if (name.compare(traversal->nextByYear->name) == 0) {
+			traversal->nextByYear = traversal->nextByYear->nextByYear;
+			return;
+		}
+		traversal = traversal->nextByYear;
+	}
 }
 
 

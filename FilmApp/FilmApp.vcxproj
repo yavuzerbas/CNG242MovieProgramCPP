@@ -141,11 +141,9 @@
   <ItemGroup>
     <ClCompile Include="FilmApp.cpp" />
     <ClCompile Include="Movie.cpp" />
-    <ClCompile Include="MovieList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Movie.h" />
-    <ClInclude Include="MovieList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
