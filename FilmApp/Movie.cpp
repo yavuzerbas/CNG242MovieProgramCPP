@@ -125,16 +125,6 @@ void Movie::update(Movie* movieList, string name, double newRate)
 		}
 		traversal = traversal->nextByRate;
 	}
-	/*
-	Movie* traversal = movieList;
-	
-	while (traversal->nextByRate != NULL) {
-		if (name.compare(traversal->nextByRate->name) == 0) {
-			traversal->nextByRate = traversal->nextByRate->nextByRate;
-			return;
-		}
-		traversal = traversal->nextByRate;
-	}*/
 	cout << "The movie\"" << name << "\" doesn't exist in the system.";
 	return;
 }
@@ -176,6 +166,58 @@ void Movie::printByRate(Movie* head)
 	while (traversal->nextByRate != NULL) {
 		traversal = traversal->nextByRate;
 		printMovie(traversal);
+	}
+}
+
+void Movie::loadFile(Movie* movieList,string fileName)
+{
+	Movie* inCaseError = movieList;
+	ifstream myifstream(fileName);
+	string word,line,name;
+	double rate = 0.0;
+	int year = 0,counter = 0;
+	if (myifstream.fail()) {
+		cout << "File couldn't be opened\n";
+		return;
+	}
+	else {
+		while (!myifstream.eof()) {
+			counter++;
+			line = "";//clearing line
+			myifstream >> word;
+			if (word[0] == '"' && word[word.length()-1] != '"') {//reading a movie name having multiple words
+				line = word;
+				while (!myifstream.eof()) {
+					myifstream >> word;
+					line += " " + word;
+					if (word[word.length() - 1] == '"') {
+						name = line.substr(1, (line.length() - 2));
+						break;
+					}
+				}
+			}
+			else if (word[0] == '"' && word[word.length() - 1] == '"') {// reading a movie name having single word
+				name = word.substr(1,word.length() - 2);
+			}
+			else {
+				if (counter % 3 == 1) {
+					movieList = inCaseError;
+					movieList->nextByName = NULL;
+					movieList->nextByRate = NULL;
+					movieList->nextByYear = NULL;
+					cout << "corrupted file\n";
+					return;
+				}
+				else if (counter % 3 == 2) {
+					rate = stod(word);
+				}
+				else {
+					year = stoi(word);
+
+					add(movieList, name, rate, year);
+				}
+			}
+		}
 	}
 }
 
@@ -281,5 +323,3 @@ void Movie::removeByYear(Movie* movieList, string name)
 		traversal = traversal->nextByYear;
 	}
 }
-
-

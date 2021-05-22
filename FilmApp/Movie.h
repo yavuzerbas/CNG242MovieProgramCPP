@@ -1,7 +1,11 @@
 #pragma once
 
 #include <string>
+#include <fstream>
+
 using std::string;
+using std::ifstream;
+using std::ofstream;
 
 class Movie
 {
@@ -42,7 +46,7 @@ public:
 	static void printByYear(Movie*);
 	static void printByName(Movie*);
 	static void printByRate(Movie*);
-	static void loadFile(string);
+	static void loadFile(Movie*, string);
 	static void saveToFileByYear(string);
 	static void saveToFileByName(string);
 	static void saveToFileByRate(string);
@@ -60,6 +64,8 @@ public:
 	static bool removeByName(Movie*, string);
 	static void removeByRate(Movie*, string);
 	static void removeByYear(Movie*, string);
+
+	//static 
 
 };
 
