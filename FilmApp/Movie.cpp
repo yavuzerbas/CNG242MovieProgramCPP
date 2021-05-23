@@ -136,6 +136,8 @@ void Movie::printByYear(Movie* head)
 		cout << "Empty list!\n";
 		return;
 	}
+	cout << "\n";
+
 	Movie* traversal = head;
 	while (traversal->nextByYear != NULL) {
 		traversal = traversal->nextByYear;
@@ -149,6 +151,8 @@ void Movie::printByName(Movie* head)
 		cout << "Empty list!\n";
 		return;
 	}
+	cout << "\n";
+
 	Movie* traversal = head;
 	while (traversal->nextByName != NULL) {
 		traversal = traversal->nextByName;
@@ -162,6 +166,8 @@ void Movie::printByRate(Movie* head)
 		cout << "Empty list!\n";
 		return;
 	}
+	cout << "\n";
+
 	Movie* traversal = head;
 	while (traversal->nextByRate != NULL) {
 		traversal = traversal->nextByRate;

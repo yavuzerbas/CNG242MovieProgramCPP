@@ -7,6 +7,22 @@ using std::string;
 using std::cout;
 using std::cin;
 
+char menu() {
+    cout << "\na.Load a file\n"
+        << "b.Save to a file\n"
+        << "c.Add a movie\n"
+        << "d.Remove a movie\n"
+        << "e.Update a movie\n"
+        << "f.Print by name\n"
+        << "g.Print by rate\n"
+        << "h.Print by year\n"
+        << "x. exit: ";
+    string line;
+    cin >> line;
+    char menuChoice = line[0];
+    return menuChoice;
+}
+
 int main()
 {
     //creating linked list
@@ -17,15 +33,16 @@ int main()
     string fileName,subMenuChoice,temp,name;
     double rate;
     int year;
+    char menuChoice;
 
-    while (char menuChoice = menu() != 'x') {
+    while ((menuChoice = menu()) && (menuChoice != 'x')) {
         switch (menuChoice) {
-        case '1':
+        case 'a':
             cout << "Enter the file name with the extension:";
             cin >> fileName;
             Movie::loadFile(head,fileName);
             break;
-        case '2':
+        case 'b':
             cout << "Enter the file name with the extension:";
             cin >> fileName;
             cout << "1.Save by name\n2.Save by rate\n3.Save by year:";
@@ -43,23 +60,36 @@ int main()
                 cout << "Invalid input!\n";
             }
             break;
-        case '3':
+        case 'c':
             cout << "Enter the name of the movie:";
-            cin >> name;
+            cin.ignore();
+            getline(cin,name);
             cout << "Enter the rate of the movie:";
             cin >> temp;
-            rate = stod(temp);
+            try {
+                rate = stod(temp);
+            }
+            catch (...) {
+                cout << "Invalid input!\n";
+                break;
+            }
             cout << "Enter the year of the movie:";
             cin >> temp;
-            year = stoi(temp);
+            try {
+                year = stoi(temp);
+            }
+            catch (...) {
+                cout << "Invalid input!\n";
+                break;
+            }
             Movie::add(head, name, rate, year);
             break;
-        case '4':
+        case 'd':
             cout << "Enter the name of the movie you want the delete: ";
             cin >> temp;
             Movie::remove(head, temp);
             break;
-        case '5':
+        case 'e':
             cout << "Enter the name of the movie you want to update: ";
             cin >> name;
             cout << "Enter the new rating of the movie: ";
@@ -67,43 +97,18 @@ int main()
             rate = stod(temp);
             Movie::update(head, name, rate);
             break;
-        case '6':
+        case 'f':
             Movie::printByName(head);
-        case '7':
+            break;
+        case 'g':
             Movie::printByRate(head);
-        case '8':
+            break;
+        case 'h':
             Movie::printByYear(head);
             break;
         default:
             cout << "Invalid input!\n";
         }
     }
-    /*
-    Movie::loadFile(head,"sampleInput.txt");
-    Movie::printByName(head);
-    cout << "\n";
-    Movie::printByRate(head);
-    cout << "\n";
-    Movie::printByYear(head);
-
-
-    Movie::saveToFileByRate(head, "sampleOutput.txt");
-    */
     return 0;
-}
-
-char menu() {
-    cout << "1.Load a file\n"
-        << "2.Save to a file\n"
-        << "3.Add a movie\n"
-        << "4.Remove a movie\n"
-        << "5.Update a movie\n"
-        << "6.Print by name\n"
-        << "7.Print by rate\n"
-        << "8.Print by year\n"
-        << "x. exit: ";
-    string line;
-    cin >> line;
-    char menuChoice = line[0];
-    return menuChoice;
 }
