@@ -47,9 +47,9 @@ public:
 	static void printByName(Movie*);
 	static void printByRate(Movie*);
 	static void loadFile(Movie*, string);
-	static void saveToFileByYear(string);
-	static void saveToFileByName(string);
-	static void saveToFileByRate(string);
+	static void saveToFileByYear(Movie*, string);
+	static void saveToFileByName(Movie*, string);
+	static void saveToFileByRate(Movie*, string);
 
 	//following 3 methods will be used in add method
 
@@ -64,8 +64,6 @@ public:
 	static bool removeByName(Movie*, string);
 	static void removeByRate(Movie*, string);
 	static void removeByYear(Movie*, string);
-
-	//static 
 
 };
 

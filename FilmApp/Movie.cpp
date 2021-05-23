@@ -178,6 +178,7 @@ void Movie::loadFile(Movie* movieList,string fileName)
 	int year = 0,counter = 0;
 	if (myifstream.fail()) {
 		cout << "File couldn't be opened\n";
+		myifstream.close();
 		return;
 	}
 	else {
@@ -206,6 +207,7 @@ void Movie::loadFile(Movie* movieList,string fileName)
 					movieList->nextByRate = NULL;
 					movieList->nextByYear = NULL;
 					cout << "corrupted file\n";
+					myifstream.close();
 					return;
 				}
 				else if (counter % 3 == 2) {
@@ -219,6 +221,67 @@ void Movie::loadFile(Movie* movieList,string fileName)
 			}
 		}
 	}
+	myifstream.close();
+}
+
+void Movie::saveToFileByName(Movie* movieList,string fileName)
+{
+	if ((movieList == NULL) || (movieList->nextByName == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	ofstream myofstream(fileName);
+	if (myofstream.fail()) {
+		cout << "File couldn't be opened\n";
+		myofstream.close();
+		return;
+	}
+	Movie* traversal = movieList;
+	while (traversal->nextByName != NULL) {
+		traversal = traversal->nextByName;
+		myofstream << "\"" << traversal->getName() << "\" " << traversal->getRate() << " " << traversal->getYear() << "\n";
+	}
+	myofstream.close();
+}
+
+void Movie::saveToFileByYear(Movie* movieList, string fileName)
+{
+	if ((movieList == NULL) || (movieList->nextByYear == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	ofstream myofstream(fileName);
+	if (myofstream.fail()) {
+		cout << "File couldn't be opened\n";
+		myofstream.close();
+		return;
+	}
+	Movie* traversal = movieList;
+	while (traversal->nextByYear != NULL) {
+		traversal = traversal->nextByYear;
+		myofstream << "\"" << traversal->getName() << "\" " << traversal->getRate() << " " << traversal->getYear() << "\n";
+	}
+	myofstream.close();
+}
+
+void Movie::saveToFileByRate(Movie* movieList, string fileName)
+{
+	if ((movieList == NULL) || (movieList->nextByRate == NULL)) { //checking if list is empty
+		cout << "Empty list!\n";
+		return;
+	}
+	ofstream myofstream(fileName);
+	if (myofstream.fail()) {
+		cout << "File couldn't be opened\n";
+		myofstream.close();
+		return;
+	}
+	Movie* traversal = movieList;
+	while (traversal->nextByRate != NULL) {
+		traversal = traversal->nextByRate;
+		myofstream << "\"" << traversal->getName() << "\" " << traversal->getRate() << " " << traversal->getYear() << "\n";
+	}
+	myofstream.close();
 }
 
 void Movie::addByName(Movie* movieList, Movie* newMovie) {

@@ -1,3 +1,0 @@
-"lotr" 8.5 2003
-"lord of the rings" 8.4 1998
-"age of kings" 10 1665
