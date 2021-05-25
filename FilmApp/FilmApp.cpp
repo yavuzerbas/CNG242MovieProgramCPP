@@ -86,12 +86,14 @@ int main()
             break;
         case 'd':
             cout << "Enter the name of the movie you want the delete: ";
-            cin >> temp;
+            cin.ignore();
+            getline(cin, temp);
             Movie::remove(head, temp);
             break;
         case 'e':
             cout << "Enter the name of the movie you want to update: ";
-            cin >> name;
+            cin.ignore();
+            getline(cin, name);
             cout << "Enter the new rating of the movie: ";
             cin >> temp;
             rate = stod(temp);
